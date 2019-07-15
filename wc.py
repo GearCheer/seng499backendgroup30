@@ -12,6 +12,7 @@ from keras.applications.resnet50 import ResNet50
 from keras.preprocessing.image import img_to_array, load_img, ImageDataGenerator
 from keras.layers import Dense, GlobalAveragePooling2D
 from keras.models import Model, load_model
+import argparse
 import time
 import os
 
@@ -86,9 +87,15 @@ class Classifier:
 
 # executes testing code when run as main
 if __name__ == "__main__":
-    # Generate and save a model
-    wc = Classifier(imageset_path=DATASET_PATH)
-    wc.save_model_weights()
+    # # Generate and save a model
+    # wc = Classifier(imageset_path=DATASET_PATH)
+    # wc.save_model_weights()
+    #
+    # # Load a model
+    # #wc2 = Classifier(model_path=MODEL_PATH)
+    # args = parser.parse_
 
-    # Load a model
-    #wc2 = Classifier(model_path=MODEL_PATH)
+    # if --load "/path"
+
+    #
+
