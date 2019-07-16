@@ -2,12 +2,15 @@ import sys
 import os
 from flask import Flask, request, make_response, jsonify
 from werkzeug.utils import secure_filename
-
+from flask_cors import CORS
 app = Flask(__name__)
+CORS(app)
 
 #UPLOAD_FOLDER = 'C:\Users\Andrew\Desktop\University\SENG499\seng499backendgroup30\waste_images'
 UPLOAD_FOLDER = 'waste_images'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
+app.config['CORS_HEADERS'] = 'Content-Type'
+
 
 def valid_request(request):
     valid = False
