@@ -63,11 +63,11 @@ class Classifier:
         self.model = Model(inputs=res_model.input, outputs=predictions)
 
         # Set all but last layer to be untrainable
-        for layer in self.model.layers[:-1]:
+        for layer in self.model.layers[:26]:
             layer.trainable=False
 
         # Set last layer to be trainable
-        for layer in self.model.layers[-1:]:
+        for layer in self.model.layers[26:]:
             layer.trainable=True
 
         # Compile and fit
