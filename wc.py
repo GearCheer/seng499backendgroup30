@@ -66,11 +66,11 @@ class Classifier:
         self.model = Model(inputs=res_model.input, outputs=predictions)
 
         # Set all but last layer to be untrainable
-        for layer in self.model.layers[:-2]:
+        for layer in self.model.layers[:-26]:
             layer.trainable=False
 
         # Set last layer to be trainable
-        for layer in self.model.layers[-2:]:
+        for layer in self.model.layers[-26:]:
             layer.trainable=True
 
         # Compile and fit
@@ -88,7 +88,7 @@ class Classifier:
         # else:
         #     self.model.save('models/model.h5')
 
-        self.model.save('models/2_dense_2_trainable_model.h5')
+        self.model.save('models/2_dense_half_trainable_model.h5')
 
     def classify(self, img):
         #TODO: image preprocessing ( ie. resizing to (384, 512, 3) )
