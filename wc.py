@@ -12,6 +12,7 @@ from keras.applications.resnet50 import ResNet50
 from keras.preprocessing.image import img_to_array, load_img, ImageDataGenerator
 from keras.layers import Dense, GlobalAveragePooling2D
 from keras.models import Model, load_model
+import tensorflow as tf
 import argparse
 import time
 import os
@@ -38,6 +39,7 @@ class Classifier:
     def __init__(self, model_path=None, imageset_path=None):
 
         self.model = None
+        self.graph = tf.get_default_graph()
 
         if imageset_path:
             self._train_new_model(imageset_path)
@@ -90,9 +92,11 @@ class Classifier:
 
         self.model.save('models/2_dense_half_trainable_model.h5')
 
+    # Outputs an array of floats from 0 to 1
     def classify(self, img):
-        #TODO: image preprocessing ( ie. resizing to (384, 512, 3) )
-        return self.model.predict(img) #TODO: see what this outputs (should be integer)
+        
+        with self.graph.as_default():
+            return self.model.predict(img)
 
     # def test(self):
     #
