@@ -5,6 +5,7 @@ from werkzeug.utils import secure_filename
 from flask_cors import CORS
 from base64 import decodestring
 import base64
+import wc
 app = Flask(__name__)
 CORS(app)
 
@@ -13,6 +14,7 @@ CORS(app)
 UPLOAD_FOLDER = 'waste_images'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 app.config['CORS_HEADERS'] = 'Content-Type'
+classifier = None
 
 
 def valid_request(request):
@@ -68,4 +70,9 @@ def get_type():
         return make_response("Invalid request", 400)
 
 def get_bin_from_image(picture):
-    return "Not implemented yet"
+    print(classifier.classify(picture))
+    #return classifier.classify(picture)
+
+if __name__ == "__main__":
+    classifier = wc.Classifier(model_path="models/model.h5")
+    app.run()
