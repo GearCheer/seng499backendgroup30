@@ -1,5 +1,6 @@
 import sys
 import os
+from datetime import datetime
 from flask import Flask, request, make_response, jsonify
 from werkzeug.utils import secure_filename
 from flask_cors import CORS
@@ -44,7 +45,7 @@ def get_type():
 
     if _valid_picture_file(picture_file):
         # Save image
-        filename = secure_filename(picture_file.filename)
+        filename = datetime.now().strftime('%Y-%m-%d-%H-%M-%S') + '.png'
         filepath = 'waste_images/{}'.format(filename)  
         data = picture_file.read()
 
@@ -75,6 +76,7 @@ def get_type():
 def _get_bin_from_image(filepath):
     picture = _load_and_format_image(filepath)
 
+    classifier = wc.Classifier(model_path="models/model.h5")
     classifier_output = classifier.classify(picture)
     return _get_type_from_classifier(classifier_output)
 
@@ -90,5 +92,5 @@ def _get_type_from_classifier(classifier_output):
     return sorted(BIN_LABELS)[index]
 
 if __name__ == "__main__":
-    classifier = wc.Classifier(model_path="models/model.h5")
+    #classifier = wc.Classifier(model_path="models/model.h5")
     app.run()
