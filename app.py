@@ -17,7 +17,7 @@ UPLOAD_FOLDER = 'waste_images'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 app.config['CORS_HEADERS'] = 'Content-Type'
 BIN_LABELS = ['Cardboard', 'Compost', 'Food', 'Glass', 'Landfill', 'Plastic, metal, and paper containers', 'Recycle', 'Soft Plastics', 'Styrofoam']
-global classifier
+classifier = wc.Classifier(model_path="models/model.h5")
 
 def _valid_request(request):
     return request.content_type == 'multipart/form-data' and 'picture' in request.files
@@ -76,7 +76,7 @@ def get_type():
 def _get_bin_from_image(filepath):
     picture = _load_and_format_image(filepath)
 
-    classifier = wc.Classifier(model_path="models/model.h5")
+    #classifier = wc.Classifier(model_path="models/model.h5")
     classifier_output = classifier.classify(picture)
     return _get_type_from_classifier(classifier_output)
 
