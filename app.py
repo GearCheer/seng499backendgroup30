@@ -74,7 +74,7 @@ def get_type():
 
 def _get_bin_from_image(filepath):
     picture = _load_and_format_image(filepath)
-    
+
     classifier_output = classifier.classify(picture)
     return _get_type_from_classifier(classifier_output)
 
