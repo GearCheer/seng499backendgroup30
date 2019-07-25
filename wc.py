@@ -82,14 +82,7 @@ class Classifier:
         self.model = load_model(model_path)
 
     def save_model_weights(self):
-
-        # TODO: YOU ALTERED THIS PATH
-        # if os.path.exists('models/model.h5'):
-        #     self.model.save('models/model_{}.h5'.format(int(time.time())))
-        # else:
-        #     self.model.save('models/model.h5')
-
-        self.model.save('models/2_dense_half_trainable_model.h5')
+        self.model.save('models/test_model.h5')
 
     # Outputs an array of floats from 0 to 1
     def classify(self, img):
@@ -107,13 +100,13 @@ class Classifier:
 # executes testing code when run as main
 if __name__ == "__main__":
     # Generate and save a model
-    # wc = Classifier(imageset_path=DATASET_PATH)
-    # wc.save_model_weights()
+    wc = Classifier(imageset_path=DATASET_PATH)
+    wc.save_model_weights()
 
     # Load a model
-    wc2 = Classifier(model_path=MODEL_PATH)
+    # wc2 = Classifier(model_path=MODEL_PATH)
 
     # Confusion Matrix
-    wc2.confusion_matrix()
+    # wc2.confusion_matrix()
 
 
