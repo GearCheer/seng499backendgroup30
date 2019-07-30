@@ -15,10 +15,14 @@ from keras.models import Model, load_model
 import tensorflow as tf
 from sklearn.metrics import confusion_matrix
 import numpy as np
+import time
+import cv2
 
 # CONSTANTS
 MODEL_PATH = "models/model.h5"
 NUM_CLASSES = 9 # Number of classes (1 for each folder in dataset).
+
+DEBUG_RECORD_TIMES = True # When true, records classification times. Only use for brief testing, as memory usage is unbound
 
 # For full dataset
 DATASET_PATH = "reclassified-dataset" # Path to dataset from working directory.
@@ -39,6 +43,10 @@ class Classifier:
 
         self.model = None
         self.graph = tf.get_default_graph()
+
+        # Used for reporting average classification time
+        self.prediction_times = []
+        self.n_predictions = 0
 
         if imageset_path:
             self._train_new_model(imageset_path)
@@ -88,7 +96,21 @@ class Classifier:
     def classify(self, img):
         
         with self.graph.as_default():
-            return self.model.predict(img)
+            if DEBUG_RECORD_TIMES:
+                start_time = time.time()
+
+            result = self.model.predict(img)
+
+            if DEBUG_RECORD_TIMES:
+                elapsed_time = time.time() - start_time
+                self.record_classification_time(elapsed_time)
+            return result
+
+    def record_classification_time(self, time):
+        if DEBUG_RECORD_TIMES:
+            self.n_predictions += 1
+            self.prediction_times.append(time)
+            print("Prediction Time: " + str(time), "seconds -- Average: " + str(sum(self.prediction_times)/self.n_predictions) + " seconds -- Number of Predictions: " + str(self.n_predictions))
 
     def confusion_matrix(self):
         datagen = ImageDataGenerator()
@@ -100,13 +122,26 @@ class Classifier:
 # executes testing code when run as main
 if __name__ == "__main__":
     # Generate and save a model
-    wc = Classifier(imageset_path=DATASET_PATH)
-    wc.save_model_weights()
+    # wc = Classifier(imageset_path=DATASET_PATH)
+    # wc.save_model_weights()
 
     # Load a model
-    # wc2 = Classifier(model_path=MODEL_PATH)
+    wc2 = Classifier(model_path=MODEL_PATH)
 
     # Confusion Matrix
     # wc2.confusion_matrix()
+
+    # Load image and classify it
+
+
+    img1 = cv2.imread('backup-images/Compost/IMG_20190718_123259873.jpg')
+    img1 = cv2.resize(img1, (384, 512))
+    img1 = np.reshape(img1, [1, 384, 512, 3])
+    wc2.classify(img1)
+
+    img2 = cv2.imread('backup-images/Compost/IMG_20190718_123301801.jpg')
+    img2 = cv2.resize(img2, (384, 512))
+    img2 = np.reshape(img2, [1, 384, 512, 3])
+    wc2.classify(img2)
 
 
